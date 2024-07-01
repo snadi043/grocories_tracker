@@ -25,7 +25,15 @@ class _NewItem extends State<NewItem> {
                 TextFormField(
                   maxLength: 50,
                   decoration: const InputDecoration(label: Text('Name')),
-                  validator: (value) => 'Validation',
+                  validator: (value) {
+                    if (value == null ||
+                        value.isEmpty ||
+                        value.trim().length <= 1 ||
+                        value.trim().length > 50) {
+                      return 'Must enter the name less than 50 letters';
+                    }
+                    return null;
+                  },
                 ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -36,6 +44,15 @@ class _NewItem extends State<NewItem> {
                         decoration: const InputDecoration(
                           label: Text('Quantity'),
                         ),
+                        validator: (value) {
+                          if (value == null ||
+                              value.isEmpty ||
+                              int.tryParse(value)! <= 1 ||
+                              int.tryParse(value) == null) {
+                            return 'Must enter valid positive integer';
+                          }
+                          return null;
+                        },
                       ),
                     ),
                     const SizedBox(width: 8),
