@@ -22,13 +22,13 @@ class _NewItem extends State<NewItem> {
   var _enteredQuantityValue = 1;
   var _selectedCategory = categories[Categories.vegetables]!;
 
-  void _onAddItem() {
+  void _onAddItem() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       final url = Uri.https(
           'flutter-mobile-app-4c151-default-rtdb.firebaseio.com',
           'shopping-list.json');
-      http.post(
+      final response = await http.post(
         url,
         headers: {
           'Content-type': 'application/json',
@@ -40,11 +40,13 @@ class _NewItem extends State<NewItem> {
         }),
       );
 
-      print(_enteredTitleValue);
-      print(_enteredQuantityValue);
-      print(_selectedCategory);
+      print(response.body);
+      print(response.statusCode);
 
-      // Navigator.of(context).pop(GroceryItem());
+      if (!context.mounted) {
+        return;
+      }
+      Navigator.of(context).pop();
     }
   }
 
