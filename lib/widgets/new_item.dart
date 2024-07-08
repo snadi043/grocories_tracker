@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:grocories_tracker/data/categories.dart';
 import 'package:grocories_tracker/models/category_model.dart';
+import 'package:grocories_tracker/models/grocery_model.dart';
 // import 'package:grocories_tracker/models/grocery_model.dart';
 
 import 'package:http/http.dart' as http;
@@ -40,13 +41,17 @@ class _NewItem extends State<NewItem> {
         }),
       );
 
-      print(response.body);
-      print(response.statusCode);
+      final Map<String, dynamic> resData = json.decode(response.body);
 
       if (!context.mounted) {
         return;
       }
-      Navigator.of(context).pop();
+      Navigator.of(context).pop(GroceryItem(
+        id: resData['name'],
+        name: _enteredTitleValue,
+        quantity: _enteredQuantityValue,
+        category: _selectedCategory,
+      ));
     }
   }
 
