@@ -16,6 +16,7 @@ class GroceryList extends StatefulWidget {
 
 class _GroceryList extends State<GroceryList> {
   List<GroceryItem> _groceryItems = [];
+  var _isLoading = true;
 
   @override
   initState() {
@@ -46,6 +47,7 @@ class _GroceryList extends State<GroceryList> {
     }
     setState(() {
       _groceryItems = loadedItems;
+      _isLoading = false;
     });
   }
 
@@ -69,9 +71,10 @@ class _GroceryList extends State<GroceryList> {
 
   @override
   Widget build(BuildContext context) {
-    Widget content = const Center(
-      child: Text('No Items Available'),
-    );
+    Widget content = _isLoading
+        ? const Center(child: CircularProgressIndicator())
+        : const Text('No Items Available');
+
     if (_groceryItems.isNotEmpty) {
       content = ListView.builder(
         itemCount: _groceryItems.length,

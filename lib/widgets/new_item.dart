@@ -22,9 +22,13 @@ class _NewItem extends State<NewItem> {
   var _enteredTitleValue = '';
   var _enteredQuantityValue = 1;
   var _selectedCategory = categories[Categories.vegetables]!;
+  var _isSending = false;
 
   void _onAddItem() async {
     if (_formKey.currentState!.validate()) {
+      setState(() {
+        _isSending = true;
+      });
       _formKey.currentState!.save();
       final url = Uri.https(
           'flutter-mobile-app-4c151-default-rtdb.firebaseio.com',
@@ -143,11 +147,19 @@ class _NewItem extends State<NewItem> {
                   children: [
                     TextButton(
                         onPressed: () {
-                          _formKey.currentState!.reset();
+                          _isSending ? null : _formKey.currentState!.reset();
                         },
                         child: const Text('Reset')),
                     ElevatedButton(
-                        onPressed: _onAddItem, child: const Text('Add Item')),
+                        onPressed: _isSending ? null : _onAddItem,
+                        child: _isSending
+                            ? const Center(
+                                child: SizedBox(
+                                height: 16,
+                                width: 16,
+                                child: CircularProgressIndicator(),
+                              ))
+                            : const Text('Add Item')),
                   ],
                 )
               ],
